@@ -1,7 +1,7 @@
 const models = require('../models');
 const bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
-const {generateToken} = require('../utils/validate')
+const {generateToken} = require('../utils/jwtUtils')
 
 const saltRounds = 10;
 

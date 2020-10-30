@@ -1,5 +1,5 @@
 const models = require('../models');
-const {verifyToken} = require('../utils/validate')
+const {verifyToken} = require('../utils/jwtUtils')
 
 exports.getProjects = (req, res) => {
     verifyToken(req.header.authorization).then(() => {
