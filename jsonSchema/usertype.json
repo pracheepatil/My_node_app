@@ -1,0 +1,29 @@
+{
+    "post/usertype": {
+        "type": "object",
+
+        "properties": {
+            "type": {
+                "type": "string"
+            }
+        },
+
+        "required": ["type"]
+    },
+
+    "put/usertype" : {
+        "type": "object",
+
+        "properties": {
+            "id": {
+                "type": "Integer"
+            },
+            
+            "type": {
+                "type": "string"
+            }  
+          
+        },
+        "required": ["id", "type"]
+    }
+}

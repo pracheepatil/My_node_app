@@ -1,0 +1,74 @@
+{
+    "post/student": {
+        "type": "object",
+
+        "properties": {
+            "fname": {
+                "type": "string"
+            },
+            "lname": {
+                "type": "string"
+            },
+            "email": {
+                "type": "string",
+                "pattern": "^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,4})$"
+            },
+            "phone": {
+                "type": "Integer",
+                "pattern": "/^\\(?([0-9]{3})\\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/"
+            },
+            "password": {
+                "type": "string"
+            }
+        },
+
+        "required": ["fname", "lname","email", "phone", "password"]
+    },
+
+    "post/sign_in": {
+        "type": "object",
+
+        "properties": {
+            "email": {
+                "type": "string"
+            },
+            "password": {
+                "type": "string"
+            }
+        },
+
+        "required" : ["email", "password"]
+    },
+
+    "put/student": {
+        "type": "object",
+
+        "properties": {
+            "id": {
+                "type": "Integer"
+            },
+            
+            "fname": {
+                "type": "string"
+            },
+            "lname": {
+                "type": "string"
+            },
+            "email": {
+                "type": "string",
+                "pattern": "^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,4})$"
+            },
+            "phone": {
+                "type": "Integer",
+                "pattern": "/^\\(?([0-9]{3})\\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/"
+            },
+            "password": {
+                "type": "string"
+            }
+        
+
+        },
+
+        "required": ["id"]
+    }
+}

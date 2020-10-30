@@ -1,0 +1,29 @@
+{
+    "post/branch": {
+        "type": "object",
+
+        "properties": {
+            "name": {
+                "type": "string"
+            }
+        },
+
+        "required": ["name"]
+    },
+
+    "put/branch": {
+        "type": "object",
+        
+        "properties": {
+            "id": {
+                "type": "Integer"
+            },
+
+            "name": {
+                "type": "string"
+            }  
+                        
+        },
+        "required": ["id", "name"]
+    }
+}

@@ -1,0 +1,29 @@
+{
+    "post/project": {
+        "type": "object",
+
+        "properties": {
+            "name": {
+                "type": "string"
+            }
+        },
+
+        "required": ["name"]
+    },
+
+    "put/project": {
+        "type": "object",
+        
+        "properties": {
+            "id": {
+                "type": "Integer"
+            },
+            
+            "name": {
+                "type": "string"
+            }  
+                    
+    },
+        "required": ["id", "name"]
+    }
+}

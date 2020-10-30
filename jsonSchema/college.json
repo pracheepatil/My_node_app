@@ -1,0 +1,28 @@
+{
+    "post/college": {
+        "type": "object",
+
+        "properties": {
+            "name": {
+                "type": "string"
+            }
+        },
+        "required": ["name"]
+    },
+
+    "put/college": {
+        "type": "object",
+        
+        "properties": {
+            "id": {
+                "type": "Integer"
+            },
+           
+            "name": {
+                "type": "string"
+            }  
+                       
+        },
+        "required": ["id", "name"]
+    }
+}

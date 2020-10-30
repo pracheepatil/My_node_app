@@ -1,0 +1,10 @@
+{
+    "db" : {
+        "host" : "localhost",
+        "database" : "project_info",
+        "username" : "prach",
+        "password" : "prach2796",
+        "dialect" : "mysql",
+        "timezone": "+05:30"
+    }
+}
