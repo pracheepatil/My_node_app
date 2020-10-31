@@ -41,7 +41,7 @@ exports.getBranches = (req, res) => {
 }
 
 exports.createBranch = (req, res) => {
-    verifyToken(req.header.authorization).then((data) => {
+   verifyToken(req.header.authorization).then((data) => {
         if(data.type == "Admin"){
             models.branch.create(req.body)
             .then(data => res.status(201).send(data))
@@ -58,13 +58,13 @@ exports.createBranch = (req, res) => {
 exports.updateBranch = (req, res) => {
     verifyToken(req.header.authorization).then((data) => {
         if(data.type == "Admin"){
-            models.branch.update({
-                name: req.body.name
-            },
-            {where: {
-                    id: req.params.id
-                }
-            })
+            const updateData = req.body.updateData;
+            models.branch.update(
+                updateData,
+                {where: {
+                        id: req.body.id
+                    }
+                })
             .then(data => res.send(data))
             .catch(err => res.status(500).send(err))
         }else {

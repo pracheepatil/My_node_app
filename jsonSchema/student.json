@@ -48,27 +48,31 @@
                 "type": "integer"
             },
             
-            "fname": {
-                "type": "string"
-            },
-            "lname": {
-                "type": "string"
-            },
-            "email": {
-                "type": "string",
-                "pattern": "^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,4})$"
-            },
-            "phone": {
-                "type": "integer",
-                "pattern": "/^\\(?([0-9]{3})\\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/"
-            },
-            "password": {
-                "type": "string"
+            "updateData": {
+                "type": "object",
+                
+                "fname": {
+                    "type": "string"
+                },
+                "lname": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string",
+                    "pattern": "^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,4})$"
+                },
+                "phone": {
+                    "type": "integer",
+                    "pattern": "/^\\(?([0-9]{3})\\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/"
+                },
+                "password": {
+                    "type": "string"
+                }
+            
             }
-        
 
         },
 
-        "required": ["id"]
+        "required": ["id", "updateData"]
     }
 }

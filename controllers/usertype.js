@@ -49,30 +49,30 @@ exports.getUserType = (req, res) => {
 }
 
 exports.createUserType = (req, res) => {
-    verifyToken(req.header.authorization).then((data) => {
-        if(data.type == "Admin"){
+    // verifyToken(req.header.authorization).then((data) => {
+    //     if(data.type == "Admin"){
             models.usertype.create(req.body)
             .then(data => res.status(201).send(data))
             .catch(err => res.status(500).send(err))
-        }else {
-            res.sendStatus(401);
-        }
-    })
-    .catch(err => res.send({
-        message: "Token Not Valid"
-    }).status(401))
+    //     }else {
+    //         res.sendStatus(401);
+    //     }
+    // })
+    // .catch(err => res.send({
+    //     message: "Token Not Valid"
+    // }).status(401))
 }
 
 exports.updateUserType= (req, res) => {
     verifyToken(req.header.authorization).then((data) => {
         if(data.type == "Admin"){
-            models.usertype.update({
-                name: req.body.name
-            },
-            {where: {
-                    id: req.params.id
-                }
-            })
+            const updateData = req.body.updateData;
+            models.usertype.update(
+                updateData,
+                {where: {
+                        id: req.body.id
+                    }
+                })
             .then(data => res.send(data))
             .catch(err => res.status(500).send(err))
         }else {

@@ -19,11 +19,15 @@
                 "type": "integer"
             },
             
-            "type": {
-                "type": "string"
+            "updateData": {
+                "type": "object",
+
+                "u_type": {
+                    "type": "string"
+                }
             }  
           
         },
-        "required": ["id", "type"]
+        "required": ["id", "updateData"]
     }
 }

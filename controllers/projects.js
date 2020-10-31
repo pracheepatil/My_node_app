@@ -56,26 +56,26 @@ exports.getProject = (req, res) => {
 }
 
 exports.createProject= (req, res) => {
-    verifyToken(req.header.authorization).then(() => {
+    // verifyToken(req.header.authorization).then(() => {
         models.project.create(req.body)
         .then((data) => res.status(201).send(data))
         .catch(err => res.status(500).send(err))  
-    })
-    .catch(err => res.send({
-        message: "Token Not Valid"
-    }).status(401))
+    // })
+    // .catch(err => res.send({
+    //     message: "Token Not Valid"
+    // }).status(401))
 
 }
 
 exports.updateProject = (req, res) => {
     verifyToken(req.header.authorization).then(() => {
-        models.project.update({
-            name: req.body.name
-        },
-        {where: {
-                id: req.params.id
-            }
-        })
+        const updateData = req.body.updateData;
+        models.project.update(
+            updateData,
+            {where: {
+                    id: req.body.id
+                }
+            })
         .then(data => res.send(data))
         .catch(err => res.status(500).send(err))
     })

@@ -16,13 +16,15 @@
         "properties": {
             "id": {
                 "type": "integer"
-            },
-           
-            "name": {
-                "type": "string"
-            }  
-                       
+            },           
+           "updateData": {
+                "type": "object",
+
+                "name": {
+                    "type": "string"
+                }  
+           }                      
         },
-        "required": ["id", "name"]
+        "required": ["id", "updateData"]
     }
 }

@@ -87,15 +87,11 @@ exports.getStudent = (req, res) => {
 }
 
 exports.updateStudent = (req, res) => {
-    if(isNaN(req.params.id)){
-        res.status(400).send({
-            message: "id should be integer"
-        })
-    }
+    const updateData = req.body.updateData;
     models.student.update(
-        req.body,
+        updateData,
         {where: {
-                id: req.params.id
+                id: req.body.id
             }
     })
     .then(data => res.send(data))
