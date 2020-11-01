@@ -1,4 +1,6 @@
 const express = require('express');
+require('dotenv').config();
+
 const models = require('./models');
 const router = require('./routes')
 const ajv = require('./utils/validateSchema');
@@ -35,3 +37,5 @@ models.sequelize.sync({alter:true}).then(() => {
     })
 })
 .catch(err => console.log("Error", err));
+
+module.exports = app;
