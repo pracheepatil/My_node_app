@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=test jest",
-    "start": "node server.js"
+    "start": "NODE_ENV=prod node server.js"
   },
   "author": "prachee patil",
   "license": "ISC",
@@ -21,6 +21,12 @@
     "sequelize": "^6.3.5"
   },
   "devDependencies": {
-    "jest": "^26.6.1"
+    "jest": "^26.6.1",
+    "supertest": "^6.0.0"
+  },
+  "jest": {
+    "setupFilesAfterEnv": [
+      "<rootDir>/jest.setup.js"
+    ]
   }
 }

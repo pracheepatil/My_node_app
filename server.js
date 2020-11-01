@@ -29,13 +29,16 @@ app.use((req, res, next) => {
 
 app.use('/api', router);
 
-console.log("Starting server on : ", PORT, "......")
 
-models.sequelize.sync({alter:true}).then(() => {
-    app.listen(PORT, () => {
-        console.log('\x1b[34m', "Server Started ");
+if (process.env.NODE_ENV === 'prod') {
+    console.log("Starting server on : ", PORT, "......");
+    
+    models.sequelize.sync({alter:true}).then(() => {
+        app.listen(PORT, () => {
+            console.log('\x1b[34m', "Server Started ");
+        })
     })
-})
-.catch(err => console.log("Error", err));
+    .catch(err => console.log("Error", err));
+}
 
 module.exports = app;
