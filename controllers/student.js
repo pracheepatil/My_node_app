@@ -8,17 +8,13 @@ const saltRounds = 10;
 exports.createStudent = (req, res) => {
     const student = req.body
     bcrypt.hash(student.password, saltRounds, function(err, hash) {
-      if(err) {
-        res.status(500).send(err)
-      }else {
-     
-        models.student.create(student)
-        .then(data => {
-            res.status(201).send(data)
-            console.log("Student data", data)
-         })
-        .catch(err => res.status(500).send(err))
-      }
+        if(err) {
+            res.status(500).send(err)
+        } else {
+            models.student.create(student)
+            .then(data => res.status(201).send(data))
+            .catch(err => res.status(500).send(err))
+        }
     })
 }
 
