@@ -19,11 +19,12 @@ function verifyToken(token){
       if(err) {
         reject(err)
       }else{
-        if (Date.now() <= exp * 1000) {
-          resolve(decoded)
-          }else { 
-          console.log(false, 'token is expired') 
-        }      
+        resolve(decoded)
+        // if (Date.now() <= exp * 1000) {
+        //   resolve(decoded)
+        //   }else { 
+        //   console.log(false, 'token is expired') 
+        // }      
       }
        });
   });

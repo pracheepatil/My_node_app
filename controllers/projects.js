@@ -13,9 +13,9 @@ exports.getProjects = (req, res) => {
         })
         .catch(err => res.status(500).send(err))    
     })
-    .catch(err => res.send({
-        message: "Token Not Valid"
-    }).status(401))
+    .catch(err => res.status(403).send(
+        {message: "Token Not Valid"}
+    ))
 }
 
 exports.getProject = (req, res) => {
@@ -50,20 +50,20 @@ exports.getProject = (req, res) => {
         }
        
     })
-    .catch(err => res.send({
-        message: "Token Not Valid"
-    }).status(401))
+    .catch(err => res.status(403).send(
+       { message: "Token Not Valid"}
+    ))
 }
 
 exports.createProject= (req, res) => {
-    // verifyToken(req.header.authorization).then(() => {
+    verifyToken(req.header.authorization).then(() => {
         models.project.create(req.body)
         .then((data) => res.status(201).send(data))
         .catch(err => res.status(500).send(err))  
-    // })
-    // .catch(err => res.send({
-    //     message: "Token Not Valid"
-    // }).status(401))
+    })
+    .catch(err => res.status(403).send(
+        {message: "Token Not Valid"}
+    ))
 
 }
 
@@ -79,14 +79,14 @@ exports.updateProject = (req, res) => {
         .then(data => res.send(data))
         .catch(err => res.status(500).send(err))
     })
-    .catch(err => res.send({
-        message: "Token Not Valid"
-    }).status(401))
+    .catch(err => res.status(403).send(
+        {message: "Token Not Valid"}
+    ))
    
 }
 
 exports.deleteProject = (req, res) => {
-    verifyToken(req.header.authorization).then((data) => {
+    verifyToken(req.header.authorization).then(() => {
         models.project.destroy({
                 where: {
                     id: req.params.id
@@ -95,9 +95,7 @@ exports.deleteProject = (req, res) => {
         .then(data => res.send(data))
         .catch(err => res.status(500).send(err))
     })
-    .catch(err => res.send({
-        message: "Token Not Valid"
-    }).status(401))
-
-    
+    .catch(err => res.status(403).send(
+        {message: "Token Not Valid"}
+    ))   
 }

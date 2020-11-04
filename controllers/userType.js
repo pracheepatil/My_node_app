@@ -4,7 +4,7 @@ const {verifyToken} = require('../utils/jwtUtils')
 exports.getAllUserTypes = (req, res) => {
     verifyToken(req.header.authorization).then((data) => {
         if(data.type == "Admin"){
-            models.usertype.findAll()
+            models.userType.findAll()
             .then(data => {
                 if(data.length === 0){
                     res.sendStatus(204);
@@ -17,9 +17,9 @@ exports.getAllUserTypes = (req, res) => {
             res.sendStatus(401);
         }
     })
-    .catch(err => res.send({
-        message: "Token Not Valid"
-    }).status(401))
+    .catch(err => res.status(403).send(
+       { message: "Token Not Valid"}
+    ))
 }
 
 exports.getUserType = (req, res) => {
@@ -29,7 +29,7 @@ exports.getUserType = (req, res) => {
                 message: "id should be integer"
             })
         }
-        models.usertype.findAll({
+        models.userType.findAll({
             where: {
                 id: req.params.id
             }
@@ -43,31 +43,31 @@ exports.getUserType = (req, res) => {
         })
         .catch(err => res.status(500).send(err))
     })
-    .catch(err => res.send({
-        message: "Token Not Valid"
-    }).status(401))
+    .catch(err => res.status(403).send(
+        {message: "Token Not Valid"}
+    ))
 }
 
 exports.createUserType = (req, res) => {
-    // verifyToken(req.header.authorization).then((data) => {
-    //     if(data.type == "Admin"){
-            models.usertype.create(req.body)
+    verifyToken(req.header.authorization).then((data) => {
+        if(data.type == "Admin"){
+            models.userType.create(req.body)
             .then(data => res.status(201).send(data))
             .catch(err => res.status(500).send(err))
-    //     }else {
-    //         res.sendStatus(401);
-    //     }
-    // })
-    // .catch(err => res.send({
-    //     message: "Token Not Valid"
-    // }).status(401))
+        }else {
+            res.sendStatus(401);
+        }
+    })
+    .catch(err => res.status(401).send(
+        {message: "Token Not Valid"}
+    ))
 }
 
 exports.updateUserType= (req, res) => {
     verifyToken(req.header.authorization).then((data) => {
         if(data.type == "Admin"){
             const updateData = req.body.updateData;
-            models.usertype.update(
+            models.userType.update(
                 updateData,
                 {where: {
                         id: req.body.id
@@ -79,15 +79,20 @@ exports.updateUserType= (req, res) => {
             res.sendStatus(401)
         }
     })
-    .catch(err => res.send({
-        message: "Token Not Valid"
-    }).status(401))
+    .catch(err => res.status(403).send(
+        {message: "Token Not Valid"}
+    ))
 }
 
 exports.deleteUserType = (req, res) => {
     verifyToken(req.header.authorization).then((data) => {
         if(data.type == "Admin"){
-            models.usertype.destroy({
+            if(isNaN(req.params.id)){
+                res.status(400).send({
+                    message: "id should be integer"
+                })
+            }
+            models.userType.destroy({
                 where: {
                     id: req.params.id
                 }
@@ -97,7 +102,7 @@ exports.deleteUserType = (req, res) => {
         }
        
     })
-    .catch(err => res.send({
-        message: "Token Not Valid"
-    }).status(401))
+    .catch(err => res.status(403).send(
+       { message: "Token Not Valid"}
+    ))
 }

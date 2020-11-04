@@ -17,9 +17,9 @@ exports.getCollegeBranchMaps = (req, res) => {
             res.sendStatus(401)
         }     
     })
-    .catch(err => res.send({
-        message: "Token Not Valid"
-    }).status(401))
+    .catch(err => res.status(403).send(
+        {message: "Token Not Valid"}
+    ))
 }
 
 exports.getCollegeBranchMap = (req, res) => {
@@ -47,9 +47,9 @@ exports.getCollegeBranchMap = (req, res) => {
             res.sendStatus(401);
         }
     })
-    .catch(err => res.send({
-        message: "Token Not Valid"
-    }).status(401))
+    .catch(err => res.status(403).send(
+        {message: "Token Not Valid"}
+    ))
 }
 
 exports.createCollegeBranchMap = (req, res) => {
@@ -60,12 +60,11 @@ exports.createCollegeBranchMap = (req, res) => {
             .catch(err => res.status(500).send(err))
         }else {
             res.sendStatus(401)
-        }
-        
+        }        
     })
-    .catch(err => res.send({
-        message: "Token Not Valid"
-    }).status(401))
+    .catch(err => res.status(403).send(
+        {message: "Token Not Valid"}
+    ))
 }
 
 exports.updateCollegeBranchMap = (req, res) => {
@@ -85,9 +84,9 @@ exports.updateCollegeBranchMap = (req, res) => {
             res.sendStatus(401)
         }
     })
-    .catch(err => res.send({
-        message: "Token Not Valid"
-    }).status(401))
+    .catch(err => res.status(403).send(
+       {message: "Token Not Valid"}
+    ))
 }
 
 exports.destroyCollegeBranchMap = (req, res) => {
@@ -104,7 +103,7 @@ exports.destroyCollegeBranchMap = (req, res) => {
             res.sendStatus(401)
         }
     })
-    .catch(err => res.send({
-        message: "Token Not Valid"
-    }).status(401))
+    .catch(err => res.status(403).send(
+        {message: "Token Not Valid"}
+    ))
 }

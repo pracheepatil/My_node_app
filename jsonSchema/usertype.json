@@ -1,5 +1,5 @@
 {
-    "post/usertype": {
+    "post/userType": {
         "type": "object",
 
         "properties": {
@@ -11,7 +11,7 @@
         "required": ["type"]
     },
 
-    "put/usertype" : {
+    "put/userType" : {
         "type": "object",
 
         "properties": {

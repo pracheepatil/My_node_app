@@ -11,20 +11,21 @@ const app = express();
 
 app.use(express.json());
 
-app.use((req, res, next) => {
-    let valid = false;
-    const schemaKey = `${req.method.toLowerCase()}${req.url.split('api')[1]}`;
-    console.log(schemaKey);
-    if(req.method.toLowerCase() == 'post' || req.method.toLowerCase() == 'put'){
-        valid = ajv.validate(schemaKey, req.body);
-    }else{
-       valid = true
-    }
-    if(!valid){
-        res.sendStatus(400)
-    }
-    next();
-}) 
+// app.use((req, res, next) => {
+//     let valid = false;
+    
+//     const schemaKey = `${req.method.toLowerCase()}${req.url.split('api')[1]}`;
+//     if(req.method.toLowerCase() == 'post' || req.method.toLowerCase() == 'put'){
+//         valid = ajv.validate(schemaKey, req.body);
+//     }else{
+//        valid = true
+//     }
+//     if(!valid){
+//         ajv.errorsText(res.sendStatus(400))
+//     }
+//     next();
+   
+// }) 
 
 
 app.use('/api', router);

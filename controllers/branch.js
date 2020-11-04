@@ -7,7 +7,7 @@ exports.getAllBranches = (req, res) => {
         if(data.length === 0){
             res.sendStatus(204);
         }else {
-            res.send(data)
+            res.status(200).send(data)
         }
       })
     .catch(err => res.status(500).send(err))
@@ -34,7 +34,7 @@ exports.getBranches = (req, res) => {
         if(data.length === 0){
             res.sendStatus(404); 
         }else {
-            res.send(data[0])
+            res.status(200).send(data[0])
         }
     })
     .catch(err => res.status(500).send(err))
@@ -50,9 +50,9 @@ exports.createBranch = (req, res) => {
             res.sendStatus(401)
         }      
     })
-    .catch(err => res.send({
-        message: "Token Not Valid"
-    }).status(401))
+    .catch(err => res.status(403).send(
+        {message: "Token Not Valid"}
+    ))
 }
 
 exports.updateBranch = (req, res) => {
@@ -71,9 +71,9 @@ exports.updateBranch = (req, res) => {
             res.sendStatus(401)
         }     
     })
-    .catch(err => res.send({
-        message: "Token Not Valid"
-    }).status(401))
+    .catch(err => res.status(403).send(
+        {message: "Token Not Valid"}
+    ))
 }
 
 exports.deleteBranch = (req, res) => {
@@ -83,13 +83,14 @@ exports.deleteBranch = (req, res) => {
                 where: {
                     id: req.params.id
                 }
-            }).then(data => res.send(data))
+            })
+            .then(data => res.send(data))
             .catch(err => res.status(500).send(err))
         }else {
-            res.sendStatus(401)
+            res.sendStatus(403)
         }    
     })
-    .catch(err => res.send({
-        message: "Token Not Valid"
-    }).status(401))
+    .catch(err => res.status(401).send(
+        {message: "Token Not Valid"}
+    ))
 }

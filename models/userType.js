@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const UserType = sequelize.define('usertype', {
+    const UserType = sequelize.define('userType', {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     }, { timestamps: false });
 
     UserType.associate = (models) => {
-        models.usertype.hasMany(models.student);     
+        models.userType.hasMany(models.student);     
     };
    return UserType;
 }

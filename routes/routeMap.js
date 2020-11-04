@@ -3,6 +3,7 @@ module.exports = {
             get : [
                 { "/students" : "getStudents"},
                 { "/student/:id" : "sign_in"}
+                
             ],
             post :[{ "/student" : "createStudent"}],
             put : [{ "/student/:id" : "updateStudent"}],
@@ -15,7 +16,7 @@ module.exports = {
                 { "/branches/:collegeId" : "getBranches"}
             ],
             post :[{ "/branch" : "createBranch"}],
-            put : [{ "/branch/:id" : "updateBranch"}],
+            put : [{ "/branch" : "updateBranch"}],
             delete : [{ "/branch/:id" : "deleteBranch"}]
         },
     
@@ -39,14 +40,14 @@ module.exports = {
             delete : [{ "/project/:id" : "deleteProject"}]
         },
 
-        usertype : {
+        userType : {
             get : [
-                { "/usertypes" : "getAllUserTypes"},
-                { "/usertype/:id" : "getUserType"}
+                { "/userTypes" : "getAllUserTypes"},
+                { "/userType/:id" : "getUserType"}
             ],
-            post :[{ "/usertype" : "createUserType"}],
-            put : [{ "/usertype/:id" : "updateUserType"}],
-            delete : [{ "/usertype/:id" : "deleteUserType"}]
+            post :[{ "/userType" : "createUserType"}],
+            put : [{ "/userType/:id" : "updateUserType"}],
+            delete : [{ "/userType/:id" : "deleteUserType"}]
 
         }
 

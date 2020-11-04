@@ -14,24 +14,29 @@ exports.getColleges = (req, res) => {
 }
 
 exports.getCollege = (req, res) => {
-    if(isNaN(req.params.id)){
-        res.status(400).send({
-            message: "id should be integer"
+    verifyToken(req.header.authorization).then(() => {
+        if(isNaN(req.params.id)){
+            res.status(400).send({
+                message: "id should be integer"
+            })
+        }
+        models.college.findAll({
+            where: {
+                id: req.params.id
+            }
         })
-    }
-    models.college.findAll({
-        where: {
-            id: req.params.id
-        }
+        .then(data => {
+            if(data.length === 0){
+                res.sendStatus(404); 
+            }else {
+                res.send(data[0])
+            }
+        })
+        .catch(err => res.status(500).send(err))
     })
-    .then(data => {
-        if(data.length === 0){
-            res.sendStatus(404); 
-        }else {
-            res.send(data[0])
-        }
-    })
-    .catch(err => res.status(500).send(err))
+    .catch(err => res.status(403).send(
+        {message: "Token Not Valid"}
+    ))
 }
 
 exports.createCollege = (req, res) => {
@@ -40,18 +45,18 @@ exports.createCollege = (req, res) => {
             models.college.create(req.body)
             .then(data => res.status(201).send(data))
             .catch(err => res.status(500).send(err))
-    //     }else {
-    //         res.sendStatus(401)
-    //     }  
+        // }else {
+        //     res.sendStatus(403)
+        // }  
     // })
-    // .catch(err => res.send({
-    //     message: "Token Not Valid"
-    // }).status(401))
+    // .catch(err => res.status(401).send(
+    //     {message: "Token Not Valid"}
+    // ))
 }
 
 exports.updateCollege = (req, res) => {
-    // verifyToken(req.header.authorization).then((data) => {
-    //     if(data.type == "Admin"){
+    verifyToken(req.header.authorization).then((data) => {
+        if(data.type == "Admin"){
             models.college.update(
                 req.body.updateData,
                 {where: {
@@ -63,14 +68,13 @@ exports.updateCollege = (req, res) => {
                 console.log(data)
             })
             .catch(err => res.status(500).send(err))
-    //     }else {
-    //         res.sendStatus(401)
-    //     }
-       
-    // })
-    // .catch(err => res.send({
-    //     message: "Token Not Valid"
-    // }).status(401))
+        }else {
+            res.sendStatus(403)
+        }      
+    })
+    .catch(err => res.status(401).send(
+        {message: "Token Not Valid"}
+    ))
 }
 
 exports.deleteCollege = (req, res) => {
@@ -84,10 +88,10 @@ exports.deleteCollege = (req, res) => {
             .then(data => res.send(data))
             .catch(err => res.status(500).send(err))
         }else {
-            res.sendStatus(401)
+            res.sendStatus(403)
         }    
     })
-    .catch(err => res.send({
-        message: "Token Not Valid"
-    }).status(401))
+    .catch(err => res.status(401).send(
+       { message: "Token Not Valid"}
+    ))
 }
