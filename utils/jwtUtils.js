@@ -1,38 +1,32 @@
 const jwt = require('jsonwebtoken');
 
-// function generateToken(payload, isRefreshToken){
-//   return new Promise((resolve, reject) => {
-   
-//     jwt.sign(payload, "secret", function(err, token) {
-//       if(err) {
-//         reject(err)
-//       } else {
-//         resolve(token)
-//       }
-//     })
-//   })
-// }
-
-function verifyToken(token){
+exports.generateToken = (payload, isRefreshToken=false) => {
   return new Promise((resolve, reject) => {
-    jwt.verify(token, 'secret', function(err, decoded) {
-      if(err) {
-        reject(err)
-      }else{
-        resolve(decoded)
-        // if (Date.now() <= exp * 1000) {
-        //   resolve(decoded)
-        //   }else { 
-        //   console.log(false, 'token is expired') 
-        // }      
-      }
-       });
-  });
+    if (isRefreshToken) {
+      payload.exp = Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 7); // 7 days in seconds
+      payload.refreshToken = true;
+    } else {
+      payload.exp = Math.floor(Date.now() / 1000) + (60 * 60); // current seconds + 1hour in seconds
+      payload.refreshToken = false;
+    }
+    jwt.sign(payload, process.env.SECRET_ENCRYPTION_KEY, function(err, token) {
+      err ? reject(err) : resolve(token);
+    })
+  })
 }
 
-
-
-module.exports = {
-  //generateToken,
-  verifyToken
+exports.verifyToken = (token, isRefreshToken=false) => {
+  return new Promise((resolve, reject) => {
+    jwt.verify(token, process.env.SECRET_ENCRYPTION_KEY, function(err, decoded) {
+      if(err) {
+        reject(err)
+      } else {
+        if (isRefreshToken === decoded.refreshToken) {
+          resolve(decoded)
+        } else {
+          reject({err: 'Invalid Token'});
+        }
+      }
+    });
+  });
 }

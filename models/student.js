@@ -28,5 +28,10 @@ module.exports = (sequelize, DataTypes) => {
         }
 
     }, {timestamps: false});
+
+    Student.associate = (models) => {
+        models.student.hasMany(models.projectMapping);
+        models.student.belongsTo(models.userType);
+    }
     return Student;
 }

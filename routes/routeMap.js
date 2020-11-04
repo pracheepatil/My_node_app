@@ -1,11 +1,10 @@
 module.exports = {
         student : {
-            get : [
-                { "/students" : "getStudents"},
-                { "/student/:id" : "sign_in"}
-                
+            get : [{ "/students" : "getStudents"}],
+            post :[
+                { "/signUp" : "createStudent"},
+                { "/signIn" : "sign_in"}
             ],
-            post :[{ "/student" : "createStudent"}],
             put : [{ "/student/:id" : "updateStudent"}],
             delete : [{ "/student/:id" : "deleteStudent"}]
         },
@@ -33,7 +32,7 @@ module.exports = {
         projects : {
             get : [
                 { "/projects" : "getProjects"},
-                { "/project/:studentId" : "getProject"}
+                // { "/project/:studentId" : "getProject"}
             ],
             post :[{ "/project" : "createProject"}],
             put : [{ "/project/:id" : "updateProject"}],

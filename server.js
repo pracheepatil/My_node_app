@@ -18,22 +18,24 @@ app.use((req, res, next) => {
         const schemaKey = `${req.method.toLowerCase()}${req.url.split('api')[1]}`;
         valid = ajv.validate(schemaKey, req.body);
     } else {
-       valid = true
+        valid = true
     }
     if (!valid) {
         res.status(400).send(ajv.errorsText())
+    } else {
+        next();
     }
-    next();
 }) 
 
 app.use('/api', router);
+app.use('/jsonSchema', express.static('jsonSchema'));
 
 if (process.env.NODE_ENV !== 'dev') {
-    console.log(`Starting server on ${PORT}...`);
+    console.log('\x1b[35m', `Starting server on ${PORT}...`);
     
     models.sequelize.sync({alter:true}).then(() => {
         app.listen(PORT, () => {
-            console.log('\x1b[34m', "Server Started... ");
+            console.log('\x1b[32m', "Server Started... ");
         })
     })
     .catch(err => console.log("Error", err));

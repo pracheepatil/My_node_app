@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
     }, { timestamps: false });
 
     Project.associate = (models) => {
-        models.project.hasMany(models.projectmapping);     
-    };
+        models.project.hasMany(models.projectMapping);
+    }
     return Project;
 }

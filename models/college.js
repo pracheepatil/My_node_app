@@ -13,7 +13,8 @@ module.exports = (sequelize, DataTypes) => {
     }, { timestamps: false });
    
     College.associate = (models) => {
-        models.college.hasMany(models.student);     
+        models.college.hasMany(models.collegeBranchMap);     
+        models.college.hasMany(models.projectMapping);
     };
 
     return College;

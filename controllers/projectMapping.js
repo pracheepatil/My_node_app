@@ -3,8 +3,8 @@ const {verifyToken} = require('../utils/jwtUtils')
 
 exports.getProjectMappings = (req, res) => {
     verifyToken(req.header.authorization).then((data) => {
-        if(data.type == "Normal"){
-            models.projectmapping.findAll()
+        if(data.type == "standard"){
+            models.projectMapping.findAll()
             .then(data => {
                 if(data.length === 0){
                     res.sendStatus(204);
@@ -24,13 +24,13 @@ exports.getProjectMappings = (req, res) => {
 
 exports.getProjectMapping = (req, res) => {
     verifyToken(req.header.authorization).then(() => {
-        if(data.type == "Normal"){
+        if(data.type == "standard"){
             if(isNaN(req.params.id)){
                 res.status(400).send({
                     message: "id should be integer"
                 })
             }
-            models.projectmapping.findAll({
+            models.projectMapping.findAll({
                 where: {
                     id: req.params.id
                 }
@@ -53,8 +53,8 @@ exports.getProjectMapping = (req, res) => {
 
 exports.createProjectMapping = (req, res) => {
     verifyToken(req.header.authorization).then((data) => {
-        if(data.type == "Normal"){
-            models.projectmapping.create(req.body)
+        if(data.type == "standard"){
+            models.projectMapping.create(req.body)
             .then(data => res.status(201).send(data))
             .catch(err => res.status(500).send(err))
         }else{
@@ -68,8 +68,8 @@ exports.createProjectMapping = (req, res) => {
 
 exports.updateProjectMapping = (req, res) => {
     verifyToken(req.header.authorization).then((data) => {
-        if(data.type == "Normal"){
-            models.projectmapping.update({
+        if(data.type == "standard"){
+            models.projectMapping.update({
                 name: req.body.name
             },
             {where: {
@@ -89,8 +89,8 @@ exports.updateProjectMapping = (req, res) => {
 
 exports.deleteProjectMapping = (req, res) => {
     verifyToken(req.header.authorization).then((data) => {
-        if(data.type == "Normal"){
-            models.projectmapping.destroy({
+        if(data.type == "standard"){
+            models.projectMapping.destroy({
                 where: {
                     id: req.params.id
                 }

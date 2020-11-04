@@ -14,7 +14,8 @@ module.exports = (sequelize, DataTypes) => {
     }, { timestamps: false });
 
     Branch.associate = (models) => {
-        models.branch.hasMany(models.student);     
+        models.branch.hasMany(models.collegeBranchMap);     
+        models.branch.hasMany(models.projectMapping);
     };
    return Branch;
 }
