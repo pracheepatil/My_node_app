@@ -14,9 +14,9 @@ exports.getColleges = (req, res) => {
 }
 
 exports.getCollege = (req, res) => {
-    verifyToken(req.header.authorization).then(() => {
+    verifyToken(req.headers.authorization).then(() => {
         if(isNaN(req.params.id)){
-            res.status(400).send({
+            res.sendStatus(400).send({
                 message: "id should be integer"
             })
         }
@@ -32,66 +32,63 @@ exports.getCollege = (req, res) => {
                 res.send(data[0])
             }
         })
-        .catch(err => res.status(500).send(err))
+        .catch(err => res.sendStatus(500).send(err))
     })
-    .catch(err => res.status(403).send(
+    .catch(err => res.sendStatus(403).send(
         {message: "Token Not Valid"}
     ))
 }
 
 exports.createCollege = (req, res) => {
-    // verifyToken(req.header.authorization).then((data) => {
-    //     if(data.type == "Admin"){
+    verifyToken(req.headers.authorization).then((data) => {
+        if(data.userType.name == "Admin"){
             models.college.create(req.body)
-            .then(data => res.status(201).send(data))
-            .catch(err => res.status(500).send(err))
-        // }else {
-        //     res.sendStatus(403)
-        // }  
-    // })
-    // .catch(err => res.status(401).send(
-    //     {message: "Token Not Valid"}
-    // ))
+            .then(data => res.sendStatus(201).send(data))
+            .catch(err => res.sendStatus(500).send(err))
+        }else {
+            res.sendStatus(403)
+        }  
+    })
+    .catch(err => res.sendStatus(401).send(
+        {message: "Token Not Valid"}
+    ))
 }
 
 exports.updateCollege = (req, res) => {
-    verifyToken(req.header.authorization).then((data) => {
-        if(data.type == "Admin"){
+    verifyToken(req.headers.authorization).then((data) => {
+        if(data.userType.name == "Admin"){
             models.college.update(
                 req.body.updateData,
                 {where: {
                         id: req.body.id
                     }
             })
-            .then(data => {
-                res.send(data)
-                console.log(data)
-            })
-            .catch(err => res.status(500).send(err))
+            .then(data => res.send({msg: 'College Updated'}))
+            .catch(err => res.sendStatus(500).send(err))
         }else {
             res.sendStatus(403)
         }      
     })
-    .catch(err => res.status(401).send(
+    .catch(err => res.sendStatus(401).send(
         {message: "Token Not Valid"}
     ))
 }
 
 exports.deleteCollege = (req, res) => {
-    verifyToken(req.header.authorization).then((data) => {
-        if(data.type == "Admin"){
+    verifyToken(req.headers.authorization).then((data) => {
+        if(data.userType.name == "Admin"){
             models.college.destroy({
                 where: {
                     id: req.params.id
                 }
             })
-            .then(data => res.send(data))
-            .catch(err => res.status(500).send(err))
+            .then(data => res.send({msg: 'College deleted'}))
+            .catch(err => res.sendStatus(500).send(err))
         }else {
             res.sendStatus(403)
         }    
     })
-    .catch(err => res.status(401).send(
+    .catch(err => res.sendStatus(401).send(
        { message: "Token Not Valid"}
     ))
 }

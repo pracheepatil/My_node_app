@@ -1,7 +1,7 @@
 {
     "db" : {
         "host" : "localhost",
-        "database" : "project_info",
+        "database" : "project_dummy",
         "username" : "prach",
         "password" : "prach2796",
         "dialect" : "mysql",

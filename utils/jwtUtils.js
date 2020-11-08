@@ -17,16 +17,17 @@ exports.generateToken = (payload, isRefreshToken=false) => {
 
 exports.verifyToken = (token, isRefreshToken=false) => {
   return new Promise((resolve, reject) => {
+ 
     jwt.verify(token, process.env.SECRET_ENCRYPTION_KEY, function(err, decoded) {
       if(err) {
         reject(err)
       } else {
-        if (isRefreshToken === decoded.refreshToken) {
-          resolve(decoded)
-        } else {
-          reject({err: 'Invalid Token'});
+          if (isRefreshToken === decoded.refreshToken) {
+            resolve(decoded)
+          } else {
+            reject({err: 'Invalid Token'});
+          } 
         }
-      }
+      });
     });
-  });
 }

@@ -1,0 +1,42 @@
+{
+    "post/collegeBranchMap": {
+        "type": "object",
+
+        "properties": {
+            "branchId": {
+                "type": "integer"
+            },
+            "collegeId": {
+                "type": "integer"
+            }
+            
+        },
+
+        "required": ["branchId", "collegeId"]
+    },
+
+    "put/collegeBranchMap": {
+        "type": "object",
+        
+        "properties": {
+            "id": {
+                "type": "integer"
+            },
+            
+            "updateData": {
+                "type": "object",
+                
+                "branchId": {
+                    "type": "integer"
+                },
+
+                "collegeId": {
+                    "type": "integer"
+                }
+            }
+        }
+        
+    }
+
+    
+}

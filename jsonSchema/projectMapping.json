@@ -1,0 +1,53 @@
+{
+    "post/projectMapping": {
+        "type": "object",
+
+        "properties": {
+            "branchId": {
+                "type": "integer"
+            },
+            "collegeId": {
+                "type": "integer"
+            },
+            "studentId": {
+                "type": "integer"
+            },
+            "projectId": {
+                "type": "integer"
+            }
+        },
+
+        "required": ["branchId", "collegeId", "studentId", "projectId"]
+    },
+
+    "put/projectMapping": {
+        "type": "object",
+        
+        "properties": {
+            "id": {
+                "type": "integer"
+            },
+            
+            "updateData": {
+                "type": "object",
+                
+                "branchId": {
+                    "type": "integer"
+                },
+                "collegeId": {
+                    "type": "integer"
+                },
+                "studentId": {
+                    "type": "integer"
+                },
+                "projectId": {
+                    "type": "integer"
+                }
+            }
+        }
+        
+    }
+
+    
+}
+

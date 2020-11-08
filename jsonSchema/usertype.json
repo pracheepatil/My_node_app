@@ -3,12 +3,12 @@
         "type": "object",
 
         "properties": {
-            "type": {
+            "name": {
                 "type": "string"
             }
         },
 
-        "required": ["type"]
+        "required": ["name"]
     },
 
     "put/userType" : {
@@ -22,7 +22,7 @@
             "updateData": {
                 "type": "object",
 
-                "u_type": {
+                "name": {
                     "type": "string"
                 }
             }  

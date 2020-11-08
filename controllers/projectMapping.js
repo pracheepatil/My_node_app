@@ -2,8 +2,8 @@ const models = require('../models');
 const {verifyToken} = require('../utils/jwtUtils')
 
 exports.getProjectMappings = (req, res) => {
-    verifyToken(req.header.authorization).then((data) => {
-        if(data.type == "standard"){
+    verifyToken(req.headers.authorization).then((data) => {
+        if(data.userType.name == "Standard"){
             models.projectMapping.findAll()
             .then(data => {
                 if(data.length === 0){
@@ -23,52 +23,57 @@ exports.getProjectMappings = (req, res) => {
 }
 
 exports.getProjectMapping = (req, res) => {
-    verifyToken(req.header.authorization).then(() => {
-        if(data.type == "standard"){
-            if(isNaN(req.params.id)){
-                res.status(400).send({
+    verifyToken(req.headers.authorization).then((data) => {
+        if(data.userType.name == "Standard"){
+            
+            if(isNaN(parseInt(req.params.id))){
+                res.sendStatus(400).send({
                     message: "id should be integer"
                 })
             }
             models.projectMapping.findAll({
                 where: {
-                    id: req.params.id
+                    id: parseInt(req.params.id)
+                },
+                include: {
+                    model: models.project,
+                    required: true     
                 }
             }).then(data => {
                 if(data.length === 0){
                     res.sendStatus(404); 
                 }else {
-                    res.send(data[0])
+                    res.send(data)
                 }
             })
-            .catch(err => res.status(500).send(err))   
+            .catch(err => res.sendStatus(500).send(err))   
         }else{
             res.sendStatus(401)
         }    
     })
-    .catch(err => res.status(403).send(
+    .catch(err => res.sendStatus(403).send(
        { message: "Token Not Valid"}
     ))
 }
 
 exports.createProjectMapping = (req, res) => {
-    verifyToken(req.header.authorization).then((data) => {
-        if(data.type == "standard"){
+    verifyToken(req.headers.authorization).then((data) => {
+        if(data.userType.name == "Standard"){
             models.projectMapping.create(req.body)
-            .then(data => res.status(201).send(data))
-            .catch(err => res.status(500).send(err))
+            .then(data => res.sendStatus(201).send(data))
+            .catch(err => res.sendStatus(500).send(err))
         }else{
             res.sendStatus(401)
         }  
     })
-    .catch(err => res.status(403).send(
+    .catch(err => res.sendStatus(403).send(
         {message: "Token Not Valid"}
     ))
 }
 
 exports.updateProjectMapping = (req, res) => {
-    verifyToken(req.header.authorization).then((data) => {
-        if(data.type == "standard"){
+    verifyToken(req.headers.authorization).then((data) => {
+        if(data.userType.name == "Standard"){
             models.projectMapping.update({
                 name: req.body.name
             },
@@ -77,31 +82,31 @@ exports.updateProjectMapping = (req, res) => {
                 }
             })
             .then(data => res.send(data))
-            .catch(err => res.status(500).send(err))
+            .catch(err => res.sendStatus(500).send(err))
         }else{
             res.sendStatus(401)
         }  
     })
-    .catch(err => res.status(403).send(
+    .catch(err => res.sendStatus(403).send(
         {message: "Token Not Valid"}
     ))
 }
 
 exports.deleteProjectMapping = (req, res) => {
-    verifyToken(req.header.authorization).then((data) => {
-        if(data.type == "standard"){
+    verifyToken(req.headers.authorization).then((data) => {
+        if(data.userType.name == "Standard"){
             models.projectMapping.destroy({
                 where: {
                     id: req.params.id
                 }
             })
             .then(data => res.send(data))
-            .catch(err => res.status(500).send(err))
+            .catch(err => res.sendStatus(500).send(err))
         }else{
             res.sendStatus(401)
         }  
     })
-    .catch(err => res.status(403).send(
+    .catch(err => res.sendStatus(403).send(
         {message: "Token Not Valid"}
     ))
 }

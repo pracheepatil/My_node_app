@@ -1,9 +1,9 @@
-const models = require('./models');
+const models = require('../models');
 const {verifyToken} = require('../utils/jwtUtils')
 
 exports.getCollegeBranchMaps = (req, res) => {
     verifyToken(req.header.authorization).then((data) => {
-        if(data.type == "Admin"){
+        if(data.userType.name == "Admin"){     //admin
             models.collegeBranchMap.findAll()
             .then(data => {
                 if(data.length === 0){
@@ -12,7 +12,7 @@ exports.getCollegeBranchMaps = (req, res) => {
                     res.send(data)
                 }
             })
-           .catch(err => res.status(500).send(err))
+           .catch(err => res.sendStatus(500).send(err))
         }else {
             res.sendStatus(401)
         }     
@@ -24,7 +24,7 @@ exports.getCollegeBranchMaps = (req, res) => {
 
 exports.getCollegeBranchMap = (req, res) => {
     verifyToken(req.header.authorization).then(() => {
-        if(data.type == "Admin"){
+        if(data.userType.name == "Admin"){
             if(isNaN(req.params.id)){
                 res.status(400).send({
                     message: "id should be integer"
@@ -42,34 +42,34 @@ exports.getCollegeBranchMap = (req, res) => {
                     res.send(data[0])
                 }
             })
-            .catch(err => res.status(500).send(err))
+            .catch(err => res.sendStatus(500).send(err))
         }else {
             res.sendStatus(401);
         }
     })
-    .catch(err => res.status(403).send(
+    .catch(err => res.sendStatus(403).send(
         {message: "Token Not Valid"}
     ))
 }
 
 exports.createCollegeBranchMap = (req, res) => {
     verifyToken(req.header.authorization).then((data) => {
-        if(data.type == "Admin"){
+        if(data.userType.name == "Admin"){
             models.collegeBranchMap.create(req.body)
-            .then(data => res.status(201).send(data))
-            .catch(err => res.status(500).send(err))
+            .then(data => res.sendStatus(201).send(data))
+            .catch(err => res.sendStatus(500).send(err))
         }else {
             res.sendStatus(401)
         }        
     })
-    .catch(err => res.status(403).send(
+    .catch(err => res.sendStatus(403).send(
         {message: "Token Not Valid"}
     ))
 }
 
 exports.updateCollegeBranchMap = (req, res) => {
     verifyToken(req.header.authorization).then((data) => {
-        if(data.type == "Admin"){
+        if(data.userType.name == "Admin"){
             models.collegeBranchMap.update({
                 collegeId: req.body.collegeId,
                 branchId: req.branchId
@@ -79,31 +79,31 @@ exports.updateCollegeBranchMap = (req, res) => {
                 }
             })
             .then(data => res.send(data))
-            .catch(err => res.status(500).send(err))
+            .catch(err => res.sendStatus(500).send(err))
         }else {
             res.sendStatus(401)
         }
     })
-    .catch(err => res.status(403).send(
+    .catch(err => res.sendStatus(403).send(
        {message: "Token Not Valid"}
     ))
 }
 
 exports.destroyCollegeBranchMap = (req, res) => {
     verifyToken(req.header.authorization).then((data) => {
-        if(data.type == "Admin"){
+        if(data.userType.name == "Admin"){
             models.collegeBranchMap.destroy({
                 where: {
                     id: req.params.id
                 }
             })
             .then(data => res.send(data))
-            .catch(err => res.status(500).send(err))
+            .catch(err => res.sendStatus(500).send(err))
         }else{
             res.sendStatus(401)
         }
     })
-    .catch(err => res.status(403).send(
+    .catch(err => res.sendStatus(403).send(
         {message: "Token Not Valid"}
     ))
 }

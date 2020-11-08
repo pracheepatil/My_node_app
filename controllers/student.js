@@ -6,7 +6,7 @@ const saltRounds = 10;
 
 exports.createStudent = (req, res) => {
     const student = req.body;
-    student.userTypeId = 2;
+    student.userTypeId = 5;
     bcrypt.hash(student.password, saltRounds, function(err, hash) {
         if (err) {
             res.status(500).send(err);
@@ -20,6 +20,7 @@ exports.createStudent = (req, res) => {
 }
 
 exports.sign_in = (req, res) => {
+   
     models.student.findOne({
         where: {
             email: req.body.email
@@ -36,9 +37,12 @@ exports.sign_in = (req, res) => {
             } else {
                 const student = {
                     email: data.email,
-                    userType: data.type,
+                    userType: data.userType.dataValues,
                     userId: data.id,
+                    userTypeId: data.userTypeId
                 }
+
+                console.log(student)
 
                 Promise.all([
                     generateToken(student),
@@ -56,8 +60,9 @@ exports.sign_in = (req, res) => {
 }
 
 exports.getStudents = (req, res) => {
-    // verifyToken(req.header.authorization).then((data) => {
-    //     if(data.type == "Admin"){
+   
+    verifyToken(req.headers.authorization).then((data) => {
+        if(data.userType.name == "Admin"){
             models.student.findAll()
             .then(data => {
                     if(data.length === 0){
@@ -67,13 +72,13 @@ exports.getStudents = (req, res) => {
                     }
             })
             .catch(err => res.status(500).send(err))
-    //     }else {
-    //         res.sendStatus(401)
-    //     }
-    // })
-    // .catch(err => res.status(403).send(
-    //     {message: "Token Not Valid"}
-    // ))
+        }else {
+            res.sendStatus(401)
+        }
+    })
+    .catch(err => res.status(403).send(
+        {message: "Token Not Valid"}
+    ))
 }
 
 exports.getStudent = (req, res) => {
@@ -98,8 +103,8 @@ exports.getStudent = (req, res) => {
 }
 
 exports.updateStudent = (req, res) => {
-    // verifyToken(req.header.authorization).then(() => {
-    //     const updateData = req.body.updateData;
+    verifyToken(req.headers.authorization).then(() => {
+        const updateData = req.body.updateData;
         models.student.update(
             req.body.updateData,
             {where: {
@@ -108,14 +113,14 @@ exports.updateStudent = (req, res) => {
         })
         .then(data => res.send(data))
         .catch(err => res.status(500).send(err))
-    // })
-    // .catch(err => res.status(403).send(
-    //     {message: "Token Not Valid"}
-    // ))
+    })
+    .catch(err => res.status(403).send(
+        {message: "Token Not Valid"}
+    ))
 }
 
 exports.deleteStudent = (req, res) => {
-    // verifyToken(req.header.authorization).then(() => {
+    verifyToken(req.headers.authorization).then(() => {
         if(isNaN(req.params.id)){
             res.status(400).send({
                 message: "id should be integer"
@@ -128,8 +133,22 @@ exports.deleteStudent = (req, res) => {
         })
         .then(data => res.send(data))
         .catch(err => res.status(500).send(err))
-    // })
-    // .catch(err => res.status(403).send(
-    //     {message: "Token Not Valid"}
-    // ))
+    })
+    .catch(err => res.status(403).send(
+        {message: "Token Not Valid"}
+    ))
+}
+
+exports.getRenewToken = (req, res) => {
+    verifyToken(req.headers.refreshtoken, true)
+    .then((data) => {
+        generateToken(data).then((token) => {
+            res.send({
+                Authorization: token
+            });
+        }).catch(err => console.log(err))
+    })
+    .catch(err => res.status(403).send(
+        {message: "Token Not Valid"}
+    ))
 }
