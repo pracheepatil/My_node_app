@@ -104,12 +104,12 @@ exports.getStudent = (req, res) => {
 
 exports.updateStudent = (req, res) => {
     verifyToken(req.headers.authorization).then(() => {
-        const updateData = req.body.updateData;
         models.student.update(
             req.body.updateData,
-            {where: {
+            {
+                where: {
                     id: req.body.id
-                }
+            }
         })
         .then(data => res.send(data))
         .catch(err => res.status(500).send(err))
@@ -140,7 +140,7 @@ exports.deleteStudent = (req, res) => {
 }
 
 exports.getRenewToken = (req, res) => {
-    verifyToken(req.headers.refreshtoken, true)
+    verifyToken(req.headers.refreshToken, true)
     .then((data) => {
         generateToken(data).then((token) => {
             res.send({

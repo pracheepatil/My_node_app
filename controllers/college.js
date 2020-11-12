@@ -59,7 +59,8 @@ exports.updateCollege = (req, res) => {
         if(data.userType.name == "Admin"){
             models.college.update(
                 req.body.updateData,
-                {where: {
+                {
+                    where: {
                         id: req.body.id
                     }
             })

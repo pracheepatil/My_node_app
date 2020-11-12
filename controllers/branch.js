@@ -20,15 +20,13 @@ exports.getBranches = (req, res) => {
         })
     }
     models.branch.findAll({
-        include:[
-            {
-                model: models.collegeBranchMap,
-                as: 'branches',
-                where: {
-                    collegeId: req.params.id
-                }
+        include:[{
+            model: models.collegeBranchMap,
+            as: 'branches',
+            where: {
+                collegeId: req.params.id
             }
-        ]
+        }]
     })
     .then(data => {
         if(data.length === 0){

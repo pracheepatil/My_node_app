@@ -77,7 +77,8 @@ exports.updateProjectMapping = (req, res) => {
             models.projectMapping.update({
                 name: req.body.name
             },
-            {where: {
+            {
+                where: {
                     id: req.params.id
                 }
             })
