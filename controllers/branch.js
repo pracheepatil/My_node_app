@@ -13,7 +13,7 @@ exports.getAllBranches = (req, res) => {
     .catch(err => res.status(500).send(err))
 }
 
-exports.getBranch = (req, res) => {              // needs to check
+exports.getBranch = (req, res) => {             
     if(isNaN(req.params.id)){
         res.sendStatus(400).send({
             message: "id should be integer"
