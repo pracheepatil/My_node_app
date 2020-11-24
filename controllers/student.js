@@ -4,22 +4,29 @@ const {generateToken, verifyToken} = require('../utils/jwtUtils')
 
 const saltRounds = 10;
 
-exports.createStudent = (req, res) => {
+exports.createStudent = (req, res) => {             //tested
     const student = req.body;
-    student.userTypeId = 5;
     bcrypt.hash(student.password, saltRounds, function(err, hash) {
         if (err) {
             res.status(500).send(err);
         } else {
             student.password = hash;
             models.student.create(student)
-            .then(data => res.status(201).send(data))
+            .then(data => {
+                const newData = {
+                    firstName: data.fname,
+                    lastName: data.lname,
+                    email: data.email,
+                    phone: data.phone
+                }
+                res.status(201).send(newData)
+            })
             .catch(err => res.status(500).send(err))
         }
     })
 }
 
-exports.sign_in = (req, res) => {
+exports.sign_in = (req, res) => {                 //tested
    
     models.student.findOne({
         where: {
@@ -32,6 +39,7 @@ exports.sign_in = (req, res) => {
     })
     .then(data => {
         bcrypt.compare(req.body.password, data.password, function(err, hash){
+            console.log("Hey am student data = ", data)
             if (err) {
                 res.status(403).send({err: 'invalid password'});
             } else {
@@ -41,9 +49,6 @@ exports.sign_in = (req, res) => {
                     userId: data.id,
                     userTypeId: data.userTypeId
                 }
-
-                console.log(student)
-
                 Promise.all([
                     generateToken(student),
                     generateToken(student, true)
@@ -59,7 +64,7 @@ exports.sign_in = (req, res) => {
     .catch(err => res.status(500).send(err))
 }
 
-exports.getStudents = (req, res) => {
+exports.getStudents = (req, res) => {               //tested
    
     verifyToken(req.headers.authorization).then((data) => {
         if(data.userType.name == "Admin"){
@@ -76,9 +81,7 @@ exports.getStudents = (req, res) => {
             res.sendStatus(401)
         }
     })
-    .catch(err => res.status(403).send(
-        {message: "Token Not Valid"}
-    ))
+    .catch(err => res.status(403).send(err))
 }
 
 exports.getStudent = (req, res) => {
@@ -87,59 +90,67 @@ exports.getStudent = (req, res) => {
             message: "id should be integer"
         })
     }
-    models.student.findOne({
+    models.student.findAll({
         where: {
             id: req.params.id
-        }
+        },
+        include: [
+            {
+                model: models.projectMapping,
+                include: [
+                    {
+                       model: models.project
+                    }
+                ]
+            },
+
+        ]
     })
     .then(data => {
         if(data.length === 0){
             res.sendStatus(404); 
         }else {
-            res.send(data[0])
+            for(let i = 0; i<=data[0].projectMappings.length; i++){ 
+                console.log(data[0].projectMappings[i].project.dataValues);    
+            } 
         }
     })
     .catch(err => res.status(500).send(err))
 }
 
-exports.updateStudent = (req, res) => {
+exports.updateStudent = (req, res) => {              //tested
     verifyToken(req.headers.authorization).then(() => {
         const updateData = req.body.updateData;
-        models.student.update(
-            req.body.updateData,
-            {where: {
-                    id: req.body.id
-                }
-        })
+        models.student.update(updateData)
         .then(data => res.send(data))
         .catch(err => res.status(500).send(err))
     })
-    .catch(err => res.status(403).send(
-        {message: "Token Not Valid"}
-    ))
+    .catch(err => res.status(403).send(err))
 }
 
 exports.deleteStudent = (req, res) => {
-    verifyToken(req.headers.authorization).then(() => {
-        if(isNaN(req.params.id)){
-            res.status(400).send({
-                message: "id should be integer"
-            })
-        }
-        models.student.destroy({
-            where: {
-                id: req.params.id
+    verifyToken(req.headers.authorization).then((data) => {
+        if(data.student.name == "Admin"){
+            if(isNaN(req.params.id)){
+                res.status(400).send({
+                    message: "id should be integer"
+                })
             }
-        })
-        .then(data => res.send(data))
-        .catch(err => res.status(500).send(err))
+            models.student.destroy({
+                where: {
+                    id: req.params.id
+                }
+            })
+            .then(data => res.send(data))
+            .catch(err => res.status(500).send(err))
+        }else {
+            res.sendStatus(401)
+        }       
     })
-    .catch(err => res.status(403).send(
-        {message: "Token Not Valid"}
-    ))
+    .catch(err => res.status(403).send(err))
 }
 
-exports.getRenewToken = (req, res) => {
+exports.getRenewEDToken = (req, res) => {
     verifyToken(req.headers.refreshtoken, true)
     .then((data) => {
         generateToken(data).then((token) => {
@@ -148,7 +159,5 @@ exports.getRenewToken = (req, res) => {
             });
         }).catch(err => console.log(err))
     })
-    .catch(err => res.status(403).send(
-        {message: "Token Not Valid"}
-    ))
+    .catch(err => res.status(403).send(err))
 }

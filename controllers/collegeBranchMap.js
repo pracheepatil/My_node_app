@@ -12,14 +12,12 @@ exports.getCollegeBranchMaps = (req, res) => {
                     res.send(data)
                 }
             })
-           .catch(err => res.sendStatus(500).send(err))
+           .catch(err => res.status(500).send(err))
         }else {
             res.sendStatus(401)
         }     
     })
-    .catch(err => res.status(403).send(
-        {message: "Token Not Valid"}
-    ))
+    .catch(err => res.status(403).send(err))
 }
 
 exports.getCollegeBranchMap = (req, res) => {
@@ -39,32 +37,28 @@ exports.getCollegeBranchMap = (req, res) => {
                 if(data.length === 0){
                     res.sendStatus(404); 
                 }else {
-                    res.send(data[0])
+                    res.send(data)
                 }
             })
-            .catch(err => res.sendStatus(500).send(err))
+            .catch(err => res.status(500).send(err))
         }else {
             res.sendStatus(401);
         }
     })
-    .catch(err => res.sendStatus(403).send(
-        {message: "Token Not Valid"}
-    ))
+    .catch(err => res.status(403).send(err))
 }
 
 exports.createCollegeBranchMap = (req, res) => {
     verifyToken(req.header.authorization).then((data) => {
         if(data.userType.name == "Admin"){
             models.collegeBranchMap.create(req.body)
-            .then(data => res.sendStatus(201).send(data))
-            .catch(err => res.sendStatus(500).send(err))
+            .then(data => res.status(201).send(data))
+            .catch(err => res.status(500).send(err))
         }else {
             res.sendStatus(401)
         }        
     })
-    .catch(err => res.sendStatus(403).send(
-        {message: "Token Not Valid"}
-    ))
+    .catch(err => res.sendStatus(403).send(err))
 }
 
 exports.updateCollegeBranchMap = (req, res) => {
@@ -79,14 +73,12 @@ exports.updateCollegeBranchMap = (req, res) => {
                 }
             })
             .then(data => res.send(data))
-            .catch(err => res.sendStatus(500).send(err))
+            .catch(err => res.status(500).send(err))
         }else {
             res.sendStatus(401)
         }
     })
-    .catch(err => res.sendStatus(403).send(
-       {message: "Token Not Valid"}
-    ))
+    .catch(err => res.status(403).send(err))
 }
 
 exports.destroyCollegeBranchMap = (req, res) => {
@@ -98,12 +90,10 @@ exports.destroyCollegeBranchMap = (req, res) => {
                 }
             })
             .then(data => res.send(data))
-            .catch(err => res.sendStatus(500).send(err))
+            .catch(err => res.status(500).send(err))
         }else{
             res.sendStatus(401)
         }
     })
-    .catch(err => res.sendStatus(403).send(
-        {message: "Token Not Valid"}
-    ))
+    .catch(err => res.status(403).send(err))
 }

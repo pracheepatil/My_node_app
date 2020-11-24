@@ -1,7 +1,8 @@
 const models = require('../models');
+const { collegeBranchMap, branch } = require('../routes/routeMap');
 const {verifyToken} = require('../utils/jwtUtils')
 
-exports.getColleges = (req, res) => {
+exports.getColleges = (req, res) => {              //tested
     models.college.findAll()
     .then(data => {
         if(data.length === 0){
@@ -13,48 +14,60 @@ exports.getColleges = (req, res) => {
     .catch(err => res.status(500).send(err))      
 }
 
-exports.getCollege = (req, res) => {
-    verifyToken(req.headers.authorization).then(() => {
+exports.getCollege = (req, res) => {               //tested
         if(isNaN(req.params.id)){
-            res.sendStatus(400).send({
+            res.status(400).send({
                 message: "id should be integer"
             })
         }
         models.college.findAll({
             where: {
                 id: req.params.id
-            }
+            },
+            include: [
+                {
+                    model: models.collegeBranchMap,
+                    include: [
+                        {
+                           model: models.branch
+                        }
+                    ]
+                },
+
+            ]
         })
         .then(data => {
+            
             if(data.length === 0){
                 res.sendStatus(404); 
             }else {
-                res.send(data[0])
+                
+                 for(let i = 0; i<=data[0].collegeBranchMaps.length; i++){ 
+                    console.log(data[0].collegeBranchMaps[i].branch.dataValues);    
+                }  
+                res.send('HI')              
             }
         })
-        .catch(err => res.sendStatus(500).send(err))
-    })
-    .catch(err => res.sendStatus(403).send(
-        {message: "Token Not Valid"}
-    ))
+        .catch(err => {
+            console.log("HELLLOOOO");
+            res.status(500).send(err)
+        })
 }
 
-exports.createCollege = (req, res) => {
+exports.createCollege = (req, res) => {                   //tested
     verifyToken(req.headers.authorization).then((data) => {
         if(data.userType.name == "Admin"){
             models.college.create(req.body)
-            .then(data => res.sendStatus(201).send(data))
-            .catch(err => res.sendStatus(500).send(err))
+            .then(data => res.status(201).send(data))
+            .catch(err => res.status(500).send(err))
         }else {
             res.sendStatus(403)
         }  
     })
-    .catch(err => res.sendStatus(401).send(
-        {message: "Token Not Valid"}
-    ))
+    .catch(err => res.status(401).send(err))
 }
 
-exports.updateCollege = (req, res) => {
+exports.updateCollege = (req, res) => {                 //tested        
     verifyToken(req.headers.authorization).then((data) => {
         if(data.userType.name == "Admin"){
             models.college.update(
@@ -64,17 +77,15 @@ exports.updateCollege = (req, res) => {
                     }
             })
             .then(data => res.send({msg: 'College Updated'}))
-            .catch(err => res.sendStatus(500).send(err))
+            .catch(err => res.status(500).send(err))
         }else {
             res.sendStatus(403)
         }      
     })
-    .catch(err => res.sendStatus(401).send(
-        {message: "Token Not Valid"}
-    ))
+    .catch(err => res.status(401).send(err))
 }
 
-exports.deleteCollege = (req, res) => {
+exports.deleteCollege = (req, res) => {                //tested
     verifyToken(req.headers.authorization).then((data) => {
         if(data.userType.name == "Admin"){
             models.college.destroy({
@@ -83,12 +94,10 @@ exports.deleteCollege = (req, res) => {
                 }
             })
             .then(data => res.send({msg: 'College deleted'}))
-            .catch(err => res.sendStatus(500).send(err))
+            .catch(err => res.status(500).send(err))
         }else {
             res.sendStatus(403)
         }    
     })
-    .catch(err => res.sendStatus(401).send(
-       { message: "Token Not Valid"}
-    ))
+    .catch(err => res.status(401).send(err))
 }

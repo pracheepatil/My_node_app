@@ -10,49 +10,37 @@ exports.getProjects = (req, res) => {
             res.send(data)
         }
     })
-    .catch(err => res.sendStatus(500).send(err))
+    .catch(err => res.status(500).send(err))
 }
 
 exports.getProject = (req, res) => {
-    verifyToken(req.headers.authorization).then((data) => {
-        if(data.userType.name == "Standard"){
-            if(isNaN(req.params.id)){
-                res.sendStatus(400).send({
-                    message: "id should be integer"
-                })
-            }
-            models.project.findAll({
-               where: {
-                     id: req.params.id
-                }
-            })
-            .then(data => {
-                if(data.length === 0){
-                    res.sendStatus(404); 
-                }else {
-                    res.send(data[0])
-                }
-            })
-            .catch(err => res.sendStatus(500).send(err))
-        }else {
-            res.sendStatus(401)
+    if(isNaN(req.params.id)){
+        res.status(400).send({
+            message: "id should be integer"
+        })
+    }
+    models.project.findAll({
+        where: {
+                id: req.params.id
         }
-       
     })
-    .catch(err => res.sendStatus(403).send(
-       { message: "Token Not Valid"}
-    ))
+    .then(data => {
+        if(data.length === 0){
+            res.sendStatus(404); 
+        }else {
+            res.send(data)
+        }
+    })
+    .catch(err => res.status(500).send(err))
 }
 
 exports.createProject= (req, res) => {
     verifyToken(req.headers.authorization).then(() => {
         models.project.create(req.body)
-        .then((data) => res.sendStatus(201).send(data))
-        .catch(err => res.sendStatus(500).send(err))  
+        .then((data) => res.status(201).send(data))
+        .catch(err => res.status(500).send(err))  
     })
-    .catch(err => res.sendStatus(403).send(
-        {message: "Token Not Valid"}
-    ))
+    .catch(err => res.status(403).send(err))
 }
 
 exports.updateProject = (req, res) => {
@@ -65,11 +53,9 @@ exports.updateProject = (req, res) => {
                 }
             })
         .then(data => res.send(data))
-        .catch(err => res.sendStatus(500).send(err))
+        .catch(err => res.status(500).send(err))
     })
-    .catch(err => res.sendStatus(403).send(
-        {message: "Token Not Valid"}
-    ))
+    .catch(err => res.status(403).send(err))
    
 }
 
@@ -81,9 +67,7 @@ exports.deleteProject = (req, res) => {
                 }
             })
         .then(data => res.send(data))
-        .catch(err => res.sendStatus(500).send(err))
+        .catch(err => res.status(500).send(err))
     })
-    .catch(err => res.sendStatus(403).send(
-        {message: "Token Not Valid"}
-    ))   
+    .catch(err => res.status(403).send(err))   
 }

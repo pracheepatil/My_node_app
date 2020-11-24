@@ -45,10 +45,6 @@
         "type": "object",
 
         "properties": {
-            "id": {
-                "type": "integer"
-            },
-            
             "updateData": {
                 "type": "object",
                 
@@ -72,8 +68,6 @@
             
             }
 
-        },
-
-        "required": ["id", "updateData"]
+        }
     }
 }

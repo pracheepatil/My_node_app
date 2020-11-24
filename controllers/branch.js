@@ -7,55 +7,47 @@ exports.getAllBranches = (req, res) => {
         if(data.length === 0){
             res.sendStatus(204);
         }else {
-            res.sendStatus(200).send(data)
+            res.status(200).send(data)
         }
     })
-    .catch(err => res.sendStatus(500).send(err))
+    .catch(err => res.status(500).send(err))
 }
 
-exports.getBranches = (req, res) => {
+exports.getBranch = (req, res) => {              // needs to check
     if(isNaN(req.params.id)){
         res.sendStatus(400).send({
             message: "id should be integer"
         })
     }
-    models.branch.findAll({
-        include:[
-            {
-                model: models.collegeBranchMap,
-                as: 'branches',
-                where: {
-                    collegeId: req.params.id
-                }
-            }
-        ]
+    models.branch.findOne({
+        where: {
+            id: req.params.id
+        }
     })
-    .then(data => {
+    .then(data => { 
         if(data.length === 0){
             res.sendStatus(404); 
         }else {
-            res.sendStatus(200).send(data[0])
+            res.status(200).send(data)
         }
     })
-    .catch(err => res.sendStatus(500).send(err))
+    .catch(err => res.status(500).send(err))
 }
 
-exports.createBranch = (req, res) => {
+exports.createBranch = (req, res) => {                    //tested
    verifyToken(req.headers.authorization).then((data) => {
         if(data.userType.name == 'Admin'){
             models.branch.create(req.body)
-            .then(data => res.sendStatus(201).send(data))
-            .catch(err => res.sendStatus(500).send(err))
+            .then(data => res.status(201).send(data))
+            .catch(err => res.status(500).send(err))
         }else {
             res.sendStatus(401)
         }      
     })
-    .catch(err => res.sendStatus(403).send(
-        {message: "Token Not Valid"}
-    ))
+    .catch(err => res.status(403).send(err))
 }
 
-exports.updateBranch = (req, res) => {
+exports.updateBranch = (req, res) => {                                //tested
     verifyToken(req.headers.authorization).then((data) => {
         if(data.userType.name == 'Admin'){
             const updateData = req.body.updateData;
@@ -66,17 +58,15 @@ exports.updateBranch = (req, res) => {
                     }
                 })
             .then(data => res.send({msg: 'Branch Updated'}))
-            .catch(err => res.sendStatus(500).send(err))
+            .catch(err => res.status(500).send(err))
         }else {
             res.sendStatus(401)
         }     
     })
-    .catch(err => res.sendStatus(403).send(
-        {message: "Token Not Valid"}
-    ))
+    .catch(err => res.status(403).send(err))
 }
 
-exports.deleteBranch = (req, res) => {
+exports.deleteBranch = (req, res) => {             //tested
     verifyToken(req.headers.authorization).then((data) => {
         if(data.userType.name == "Admin"){
             models.branch.destroy({
@@ -85,12 +75,10 @@ exports.deleteBranch = (req, res) => {
                 }
             })
             .then(data => res.send({msg: 'Branch Deleted'}))
-            .catch(err => res.sendStatus(500).send(err))
+            .catch(err => res.status(500).send(err))
         }else {
             res.sendStatus(403)
         }    
     })
-    .catch(err => res.sendStatus(401).send(
-        {message: "Token Not Valid"}
-    ))
+    .catch(err => res.status(401).send(err))
 }

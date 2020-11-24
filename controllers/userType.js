@@ -10,50 +10,43 @@ exports.getAllUserTypes = (req, res) => {
                 res.send(data)
             }
         })
-        .catch(err => res.sendStatus(500).send(err))
+        .catch(err => res.status(500).send(err))
     
 }
 
 exports.getUserType = (req, res) => {
-    verifyToken(req.headers.authorization).then(() => {
-        if(isNaN(req.params.id)){
-            res.sendStatus(400).send({
-                message: "id should be integer"
-            })
+    if(isNaN(req.params.id)){
+        res.status(400).send({
+            message: "id should be integer"
+        })
+    }
+    models.userType.findAll({
+        where: {
+            id: req.params.id
         }
-        models.userType.findAll({
-            where: {
-                id: req.params.id
-            }
-        })
-        .then(data => {
-            if(data.length === 0){
-                res.sendStatus(404); 
-            }else {
-                res.send(data)
-            }
-        })
-        .catch(err => res.sendStatus(500).send(err))
     })
-    .catch(err => res.sendStatus(403).send(
-        {message: "Token Not Valid"}
-    ))
+    .then(data => {
+        if(data.length === 0){
+            res.sendStatus(404); 
+        }else {
+            res.send(data)
+        }
+    })
+    .catch(err => res.status(500).send(err))
 }
 
 exports.createUserType = (req, res) => {
     verifyToken(req.headers.authorization).then((data) => {
         if(data.userType.name == "Admin"){
             models.userType.create(req.body)
-            .then(data => res.sendStatus(201).send(data))
-            .catch(err => res.sendStatus(500).send(err))
+            .then(data => res.status(201).send(data))
+            .catch(err => res.status(500).send(err))
       
         }else {
             res.sendStatus(401);
         }
     })
-    .catch(err => res.sendStatus(401).send(
-        {message: "Token Not Valid"}
-    ))
+    .catch(err => res.status(401).send(err))
 }
 
 exports.updateUserType= (req, res) => {
@@ -66,22 +59,20 @@ exports.updateUserType= (req, res) => {
                         id: req.body.id
                     }
                 })
-            .then(data => res.send(data))
-            .catch(err => res.sendStatus(500).send(err))
+            .then(data => res.send({msg: "User Type Updated"}))
+            .catch(err => res.status(500).send(err))
         }else {
             res.sendStatus(401)
         }
     })
-    .catch(err => res.sendStatus(403).send(
-        {message: "Token Not Valid"}
-    ))
+    .catch(err => res.status(403).send(err))
 }
 
 exports.deleteUserType = (req, res) => {
     verifyToken(req.headers.authorization).then((data) => {
         if(data.userType.name == "Admin"){
             if(isNaN(req.params.id)){
-                res.sendStatus(400).send({
+                res.status(400).send({
                     message: "id should be integer"
                 })
             }
@@ -90,12 +81,11 @@ exports.deleteUserType = (req, res) => {
                     id: req.params.id
                 }
             })
-            .then(data => res.send(data))
-            .catch(err => res.sendStatus(500).send(err))
-        }
-       
+            .then(data => res.send({msg: "User Type Deleted"}))
+            .catch(err => res.status(500).send(err))
+        }else {
+            res.sendStatus(401)
+        }       
     })
-    .catch(err => res.sendStatus(403).send(
-       { message: "Token Not Valid"}
-    ))
+    .catch(err => res.status(403).send(err))
 }

@@ -1,7 +1,10 @@
 module.exports = {
         student : {
             get : [{ "/students" : "getStudents"},
-                    { "/renewToken" : "getRenewToken"}],
+                    {"/student/:id" : "getStudent"},
+                    { "/renewToken" : "getRenewEDToken"}
+                    
+                ],
             post :[
                 { "/signUp" : "createStudent"},
                 { "/signIn" : "sign_in"}
@@ -13,7 +16,7 @@ module.exports = {
         branch : {
             get : [
                 { "/allBranches" : "getAllBranches"},
-                { "/branches/:collegeId" : "getBranches"}
+                { "/branch/:id" : "getBranch"}
             ],
             post :[{ "/branch" : "createBranch"}],
             put : [{ "/branch" : "updateBranch"}],
@@ -33,7 +36,7 @@ module.exports = {
         projects : {
             get : [
                 { "/projects" : "getProjects"},
-                // { "/project/:studentId" : "getProject"}
+                 { "/project/:id" : "getProject"}
             ],
             post :[{ "/project" : "createProject"}],
             put : [{ "/project" : "updateProject"}],
