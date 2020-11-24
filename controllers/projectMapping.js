@@ -57,20 +57,10 @@ exports.createProjectMapping = (req, res) => {
 }
 
 exports.updateProjectMapping = (req, res) => {
-<<<<<<< HEAD
     verifyToken(req.headers.authorization).then(() => {
             const updateData = req.body.updateData
             models.projectMapping.update(updateData,
             {where: {
-=======
-    verifyToken(req.headers.authorization).then((data) => {
-        if(data.userType.name == "Standard"){
-            models.projectMapping.update({
-                name: req.body.name
-            },
-            {
-                where: {
->>>>>>> dbbb28dae7f3e8f4ed414d4fd262ab3e4b86f531
                     id: req.params.id
                 }
             })

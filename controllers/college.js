@@ -49,7 +49,7 @@ exports.getCollege = (req, res) => {               //tested
             }
         })
         .catch(err => {
-            console.log("HELLLOOOO");
+            console.log(err);
             res.status(500).send(err)
         })
 }
